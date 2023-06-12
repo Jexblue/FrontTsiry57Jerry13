@@ -1,0 +1,14 @@
+<form ngForm #assignmentForm (submit)="onSubmit($event)" class="form">
+
+    <mat-form-field>
+        <input matInput [(ngModel)]="nom" name="nom" placeholder="Nom" required>
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput [(ngModel)]="mdp" name="mdp" placeholder="Mots de passe" required>
+    </mat-form-field>
+
+    <button mat-stroked-button color="primary">
+        Se connecter
+    </button>
+</form>
