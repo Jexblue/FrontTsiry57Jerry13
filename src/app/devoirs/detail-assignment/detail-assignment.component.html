@@ -1,1 +1,39 @@
-<p>detail-assignment works!</p>
+<h2>{{titre}}</h2>
+
+<mat-card class="card">
+    <mat-card-header>
+        <div class="title-container">
+            <div class="box gauche"><img class="matiere-image"
+                    [src]="'assets/matiere/'+assignment?.matiere?.[0]?.pathPhoto"></div>
+            <div class="box centre">
+                <h3 class="matiere-nom">{{assignment?.matiere?.[0]?.nom}}</h3>
+            </div>
+            <div class="box droite"><img class="prof-image" [src]="'assets/prof/'+assignment?.matiere?.[0]?.pathProf">
+            </div>
+        </div>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="content-container">
+            <p>Date de limite : {{assignment?.dateLimite | date:'dd/MM/yyyy'}}</p>
+            <img class="etu-image" src="assets/etudiant/{{assignment?.auteur?.[0]?.pathPhoto}}">
+            <div *ngIf="!assignment?.rendu">
+                <p>Non Rendu</p>
+            </div>
+            <div *ngIf="assignment?.rendu">
+                <p>Rendu</p>
+                <p>Date de rendu : {{assignment?.dateDeRendu | date:'dd/MM/yyyy hh:mm'}}</p>
+                <p>Note : {{assignment?.note}}</p>
+                <p></p>
+            </div>
+        </div>
+    </mat-card-content>
+    <mat-card-footer>
+        <div class="footer-content">
+            <div *ngIf="!assignment?.rendu">
+                <button mat-button>Rendre</button>
+            </div>
+            <button mat-button color="primary">Modifier</button>
+            <button mat-button color="warn" (click)="supprimer()">Supprimer</button>
+        </div>
+    </mat-card-footer>
+</mat-card>

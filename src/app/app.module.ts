@@ -49,13 +49,14 @@ const routes: Routes = [
     component: ListAssignmentComponent
   },
   {
+    path: 'assignments/:_id',
+    component: DetailAssignmentComponent
+  },
+  {
     path: 'add',
     component: AddAssignmentComponent
   },
-  {
-    path: 'assignments/:id',
-    component: AssignmentDetailComponent
-  },
+
   {
     path: 'assignments/:id/edit',
     component: EditAssignmentComponent,

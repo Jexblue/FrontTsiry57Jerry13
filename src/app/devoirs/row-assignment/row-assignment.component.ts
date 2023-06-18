@@ -18,7 +18,7 @@ export class RowAssignmentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('Assignment:', this.assignment);
+    // console.log('Assignment:', this.assignment);
   }
 
   supprimer() {

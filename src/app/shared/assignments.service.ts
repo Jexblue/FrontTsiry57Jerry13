@@ -11,6 +11,8 @@ import { EtudiantsService } from './etudiants.service';
 import { MatieresService } from './matieres.service';
 import { response } from 'express';
 import { AssignmentComplet } from '../models/assignmentComplet.model';
+import { AssignmentDetailComponent } from '../assignments/assignment-detail/assignment-detail.component';
+import { AssignmentDetail } from '../models/assignmentDetail.model';
 
 @Injectable({
   providedIn: 'root'
@@ -199,9 +201,9 @@ export class AssignmentsService {
     );
   }
 
-  getAssignment(id: number): Observable<AssignmentComplet | undefined> {
-    const url = `this.uri_api/${id}`;
-    return this.http.get<AssignmentComplet | undefined>(url);
+  getAssignment(id: string): Observable<AssignmentDetail | undefined> {
+    const url = this.uri_api + `/${id}`;
+    return this.http.get<AssignmentDetail | undefined>(url);
   }
 
   getAssignmentsRendu(page: number, limit: number): Observable<any> {

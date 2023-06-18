@@ -28,7 +28,7 @@
                 <button mat-button>Rendre</button>
             </div>
             <button mat-button color="primary">Modifier</button>
-            <button mat-button color="accent">Détails</button>
+            <button mat-button color="accent" routerLink="/assignments/{{assignment?._id}}">Détails</button>
             <button mat-button color="warn" (click)="supprimer()">Supprimer</button>
         </div>
     </mat-card-footer>
