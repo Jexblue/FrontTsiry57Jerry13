@@ -15,7 +15,7 @@ export class AssignmentDetailComponent implements OnInit {
   constructor(private assignmentsService: AssignmentsService,
     private route: ActivatedRoute,
     private router: Router,
-    private authService:AuthService) { }
+    private authService: AuthService) { }
 
   ngOnInit(): void {
     // appelée avant le rendu du composant
@@ -25,27 +25,27 @@ export class AssignmentDetailComponent implements OnInit {
     console.log("Dans le ngOnInit de detail, id = " + id);
 
     // on va chercher l'assignment à afficher
-    this.assignmentsService.getAssignment(id)
-      .subscribe(assignment => {
-        this.assignmentTransmis = assignment;
-      });
+    // this.assignmentsService.getAssignment(id)
+    //   .subscribe(assignment => {
+    //     this.assignmentTransmis = assignment;
+    //   });
   }
 
   onDeleteAssignment() {
-    if (!this.assignmentTransmis) return;
+    // if (!this.assignmentTransmis) return;
 
-    console.log("Suppression de l'assignment " + this.assignmentTransmis.nom);
+    // // console.log("Suppression de l'assignment " + this.assignmentTransmis.nom);
 
-    // on demande au service la suppression de l'assignment
-    this.assignmentsService.deleteAssignment(this.assignmentTransmis)
-      .subscribe(message => {
-        console.log(message);
-        // Pour cacher le detail, on met l'assignment à null
-        this.assignmentTransmis = undefined;
+    // // on demande au service la suppression de l'assignment
+    // this.assignmentsService.deleteAssignment(this.assignmentTransmis)
+    //   .subscribe(message => {
+    //     console.log(message);
+    //     // Pour cacher le detail, on met l'assignment à null
+    //     this.assignmentTransmis = undefined;
 
-        // et on navigue vers la page d'accueil
-        this.router.navigate(["/home"]);
-      });
+    //     // et on navigue vers la page d'accueil
+    //     this.router.navigate(["/home"]);
+    //   });
 
   }
 
@@ -67,14 +67,14 @@ export class AssignmentDetailComponent implements OnInit {
     // path = "/assignment/" + this.assignmentTransmis?.id + "/edit";
     // this.router.navigate([path]);
     // c'est pour vous montrer la syntaxe avec [...]
-    this.router.navigate(["/assignments", this.assignmentTransmis?.id, "edit"],
-    {
-      queryParams: {
-        nom: this.assignmentTransmis?.nom,
-        matiere: "Angular"
-      },
-      fragment: "edition"
-    });
+    this.router.navigate(["/assignments", this.assignmentTransmis, "edit"],
+      {
+        queryParams: {
+          nom: this.assignmentTransmis,
+          matiere: "Angular"
+        },
+        fragment: "edition"
+      });
   }
 
   isLogged() {

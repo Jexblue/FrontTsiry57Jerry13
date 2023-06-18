@@ -1,25 +1,69 @@
-<h1>
+<mat-toolbar color="primary">
+    <button mat-icon-button (click)="toggleSidebar()">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <a routerLink="/home" class="title-link">{{ title }}</a>
+    <span class="spacer"></span>
+    <button mat-raised-button color="primary" (click)="creerDonneesDeTest()" class="reset-button">
+        Reset la base de données
+    </button>
+    <div *ngIf="currentRoute !== '/login'" class="login-section">
+        <nav>
+            <a routerLink="/login">
+                <button mat-raised-button color="primary" (click)="login()" class="login-button">{{ labelConnexion
+                    }}</button>
+            </a>
+        </nav>
+    </div>
+</mat-toolbar>
+
+<mat-sidenav-container class="container">
+    <mat-sidenav mode="side" [opened]="sidebarOpened" class="sidebar">
+        <mat-toolbar *ngIf="isLogged()" class="user-toolbar">
+            <span>
+                Bonjour {{ nom }}
+            </span>
+        </mat-toolbar>
+        <mat-nav-list>
+            <a mat-list-item routerLink="/dashboard" class="sidebar-item">Creation de devoir</a>
+        </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <div class="content">
+            <div *ngIf="loading" class="spinner-container">
+                <mat-progress-spinner class="spinner" mode="indeterminate"></mat-progress-spinner>
+            </div>
+            <div *ngIf="!loading">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>
+
+
+<!-- <h1>
     <nav>
         <a routerLink="/home">{{title}}</a>
     </nav>
-</h1>
-<p>
+</h1> -->
+<!-- <p>
     <button mat-raised-button color="primary" (click)="creerDonneesDeTest()">
         Peupler BD avec données de test
     </button>
-</p>
+</p> -->
 
-<div *ngIf="currentRoute !== '/login'">
-    <p>Route courante : {{currentRoute}}</p>
-    <nav>
-        <a routerLink="/login">
-            <button mat-raised-button (click)="login()">{{labelConnexion}}</button>
-        </a>
-    </nav>
-    <p *ngIf="isLogged()">Vous êtes connecté en tant que {{nom}}</p>
-</div>
+<!-- <div *ngIf="currentRoute !== '/login'"> -->
+<!-- <p>Route courante : {{currentRoute}}</p> -->
+<!-- <nav> -->
+<!-- <a routerLink="/login"> -->
+<!-- <button mat-raised-button (click)="login()">{{labelConnexion}}</button> -->
+<!-- </a> -->
+<!-- </nav> -->
+<!-- <p *ngIf="isLogged()">Vous êtes connecté en tant que {{nom}}</p> -->
+<!-- </div> -->
 
 <!-- Indique que le composant affiché sera celui
      correspondant à l'URL courant
 -->
-<router-outlet></router-outlet>
+<!-- <router-outlet></router-outlet> -->

@@ -1,88 +1,82 @@
 import { Injectable } from '@angular/core';
 import { Assignment } from '../assignments/assignment.model';
-import { Observable, catchError, forkJoin, map, of, tap } from 'rxjs';
+import { Observable, catchError, forkJoin, map, of, switchMap, tap } from 'rxjs';
 import { LoggingService } from './logging.service';
 import { HttpClient } from '@angular/common/http';
 import { bdInitialAssignments } from './data';
+import { environment } from 'src/environments/environments';
+import { Matiere } from '../models/matiere.model';
+import { Etudiant } from '../models/etudiant.model';
+import { EtudiantsService } from './etudiants.service';
+import { MatieresService } from './matieres.service';
+import { response } from 'express';
+import { AssignmentComplet } from '../models/assignmentComplet.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AssignmentsService {
-// tableau de devoirs à rendre
-assignments:Assignment[] = []
-  constructor(private loggingService:LoggingService,
-    private http:HttpClient) { }
+  // tableau de devoirs à rendre
+  assignments: Assignment[] = []
+  matieres: Matiere[] = []
+  etudiants: Etudiant[] = []
 
-    //uri_api = 'http://localhost:8010/api/assignments';
-    uri_api = 'https://mbds-madagascar-2022-2023-back-end.onrender.com/api/assignments';
+  constructor(private loggingService: LoggingService,
+    private http: HttpClient,
+    private etudiantsService: EtudiantsService,
+    private matieresService: MatieresService) { }
 
-  getAssignments(page:number, limit:number):Observable<any> {
-    // normalement on doit envoyer une requête HTTP
-    // sur un web service, et ça peut prendre du temps
-    // On a donc besoin "d'attendre que les données arrivent".
-    // Angular utilise pour cela la notion d'Observable
+  //uri_api = 'http://localhost:8010/api/assignments';
+  // uri_api = 'https://mbds-madagascar-2022-2023-back-end.onrender.com/api/assignments';
+  uri_api = environment.apiUrl + "/api/assignments";
+
+  getAssignments(page: number, limit: number): Observable<any> {
     return this.http.get<Assignment[]>(this.uri_api + "?page=" + page + "&limit=" + limit);
-    
-    // of() permet de créer un Observable qui va
-    // contenir les données du tableau assignments
-    //return of(this.assignments);
   }
 
-  getAssignment(id:number):Observable<Assignment|undefined> {
-    // Plus tard on utilisera un Web Service et une BD
-    return this.http.get<Assignment|undefined>(`${this.uri_api}/${id}`)
-   
-    .pipe(
-      map(a => {
-        if(a) {
-          a.nom += " MAP MAP MAP";
-        }
-        return a;
-      }),
-      tap(a => {
-        if(a)
-          console.log("ICI DANS LE TAP " + a.nom)
-      }),
-      map(a => {
-        if(a) {
-          a.nom += " TOTOTOTO";
-        }
-        return a;
-      }),
-      catchError(this.handleError<Assignment>("Erreur dans le traitement de assignment avec id = " + id))
-    )
-    
-    // On va chercher dans le tableau des assignments
-    // l'assignment dont l'id est celui passé en paramètre
-    
-    //const assignment = this.assignments.find(a => a.id === id);
-    // on retourne cet assignment encapsulé dans un Observable
-    //return of(assignment);
-  }
+  // getAssignment(id: number): Observable<Assignment | undefined> {
+  //   // Plus tard on utilisera un Web Service et une BD
+  //   return this.http.get<Assignment | undefined>(`${this.uri_api}/${id}`)
+
+  //     .pipe(
+  //       map(a => {
+  //         if (a) {
+  //           a.nom += " MAP MAP MAP";
+  //         }
+  //         return a;
+  //       }),
+  //       tap(a => {
+  //         if (a)
+  //           console.log("ICI DANS LE TAP " + a.nom)
+  //       }),
+  //       map(a => {
+  //         if (a) {
+  //           a.nom += " TOTOTOTO";
+  //         }
+  //         return a;
+  //       }),
+  //       catchError(this.handleError<Assignment>("Erreur dans le traitement de assignment avec id = " + id))
+  //     )
+
+  //   // On va chercher dans le tableau des assignments
+  //   // l'assignment dont l'id est celui passé en paramètre
+
+  //   //const assignment = this.assignments.find(a => a.id === id);
+  //   // on retourne cet assignment encapsulé dans un Observable
+  //   //return of(assignment);
+  // }
 
   private handleError<T>(operation: any, result?: T) {
     return (error: any): Observable<T> => {
       console.log(error); // pour afficher dans la console
       console.log(operation + ' a échoué ' + error.message);
- 
+
       return of(result as T);
     }
- };
- 
-  addAssignment(assignment:Assignment):Observable<any> {
-    this.loggingService.log(assignment.nom, 'ajouté');
+  };
 
-    // plus tard on utilisera un web service pour l'ajout dans une vraie BD
-    return this.http.post<Assignment>(this.uri_api, assignment);
-    // on ajoute le devoir au tableau des devoirs
-    //this.assignments.push(assignment);
-    // on retourne un message de succès à travers
-    // un Observable
-    //return of(`Assignment ${assignment.nom} ajouté avec succès`);
-  }
 
-  updateAssignment(assignment:Assignment):Observable<any> {
+  updateAssignment(assignment: Assignment): Observable<any> {
     // Normalement : on appelle un web service pour l'update des
     // données
     return this.http.put<Assignment>(this.uri_api, assignment);
@@ -95,53 +89,129 @@ assignments:Assignment[] = []
     //return of(`Assignment ${assignment.nom} modifié avec succès`)
   }
 
-  deleteAssignment(assignment:Assignment):Observable<any> {
+  deleteAssignment(assignment: AssignmentComplet): Observable<any> {
     return this.http.delete(this.uri_api + "/" + assignment._id)
-      // pour supprimer on passe à la méthode splice
-    // l'index de l'assignment à supprimer et 
-    // le nombre d'éléments à supprimer (ici 1)
-    /*
-    const index = this.assignments.indexOf(assignment);
-    this.assignments.splice(index, 1);
-
-    this.loggingService.log(assignment.nom, 'supprimé');
-
-    return of('Assignment supprimé avec succès')
-    */
   }
 
-  peuplerBD() {
-    bdInitialAssignments.forEach(a => {
-      const newAssignment = new Assignment();
-      newAssignment.id = a.id;
-      newAssignment.nom = a.nom;
-      newAssignment.dateDeRendu = new Date(a.dateDeRendu);
-      newAssignment.rendu = a.rendu;
+  // peuplerBD() {
+  //   bdInitialAssignments.forEach(a => {
+  //     const newAssignment = new Assignment();
+  //     newAssignment.id = a.id;
+  //     newAssignment.nom = a.nom;
+  //     newAssignment.dateDeRendu = new Date(a.dateDeRendu);
+  //     newAssignment.rendu = a.rendu;
 
-      this.addAssignment(newAssignment)
-      .subscribe((reponse) => {
-        console.log(reponse.message);
-      })
-    })
+  //     this.addAssignment(newAssignment)
+  //       .subscribe((reponse) => {
+  //         console.log(reponse.message);
+  //       })
+  //   })
+  // }
+
+
+
+  deleteAll(): Observable<any> {
+    return this.http.delete(this.uri_api);
   }
 
-  // cette version retourne un Observable. Elle permet de savoir quand
-  // l'opération est terminée (l'ajout des 1000 assignments)
-  peuplerBDavecForkJoin():Observable<any> {
-    // tableau d'observables (les valeurs de retour de addAssignment)
-    let appelsVersAddAssignment:Observable<any>[] = [];
- 
-    bdInitialAssignments.forEach(a => {
-      const nouvelAssignment = new Assignment();
-      nouvelAssignment.id = a.id;
-      nouvelAssignment.nom = a.nom;
-      nouvelAssignment.dateDeRendu = new Date(a.dateDeRendu);
-      nouvelAssignment.rendu = a.rendu;
- 
-      appelsVersAddAssignment.push(this.addAssignment(nouvelAssignment))
-    });
- 
-    return forkJoin(appelsVersAddAssignment);
+  generateRandomDate() {
+    const start = new Date('2022-01-01');
+    const end = new Date('2022-12-31');
+
+    const timeRange = end.getTime() - start.getTime();
+    const randomTime = Math.random() * timeRange + start.getTime();
+    const randomDate = new Date(randomTime);
+
+    return randomDate;
   }
- 
+
+  IsRendu(note: number) {
+    return (note > -1);
+  }
+
+  addAssignment(assignment: Assignment): Observable<any> {
+    return this.http.post<Assignment>(this.uri_api, assignment);
+  }
+
+  // peuplerBDavecForkJoin() {
+  //   let appelsVersAddAssignment: Observable<any>[] = [];
+  //   this.etudiantsService.getAllEtudiants().subscribe(
+  //     (response) => {
+  //       this.etudiants = response;
+  //     },
+  //     (error) => {
+  //       console.error(error);
+  //     }
+  //   );
+  //   this.matieresService.getAllMatieres().subscribe(
+  //     (response) => {
+  //       this.matieres = response;
+  //       console.log("matieres recues");
+  //       console.log(this.matieres);
+  //     },
+  //     (error) => {
+  //       console.error(error);
+  //     }
+  //   );
+
+  //   this.matieres.forEach(m => {
+  //     let newAssignment = new Assignment();
+  //     newAssignment.dateDeRendu = this.generateRandomDate();
+  //     newAssignment.matiere = m._id;
+  //     this.etudiants.forEach(e => {
+  //       newAssignment.dateDeRendu = this.generateRandomDate();
+  //       newAssignment.auteur = e._id;
+  //       let note = Math.random() * 21 - 1;
+  //       newAssignment.note = note;
+  //       newAssignment.rendu = this.IsRendu(note);
+  //     })
+  //     console.log(newAssignment);
+  //     appelsVersAddAssignment.push(this.addAssignment(newAssignment))
+  //   })
+
+  //   return forkJoin(appelsVersAddAssignment);
+  // }
+
+  peuplerBDavecForkJoin(): Observable<any> {
+    return forkJoin([
+      this.etudiantsService.getAllEtudiants(),
+      this.matieresService.getAllMatieres()
+    ]).pipe(
+      map(([etudiants, matieres]) => {
+        let appelsVersAddAssignment: Observable<any>[] = [];
+        matieres.forEach((matiere: Matiere) => {
+          etudiants.forEach((etudiant: Etudiant) => {
+            let newAssignment = new Assignment();
+            newAssignment.dateDeRendu = this.generateRandomDate();
+            newAssignment.dateLimite = new Date(2024, 1, 1);
+            newAssignment.matiere = matiere._id;
+            newAssignment.auteur = etudiant._id;
+            let note = Math.round(Math.random() * (20 - (-1))) + (-1);
+            newAssignment.note = note;
+            newAssignment.rendu = this.IsRendu(note);
+            appelsVersAddAssignment.push(this.addAssignment(newAssignment));
+          });
+        });
+
+        return appelsVersAddAssignment;
+      }),
+      switchMap(appelsVersAddAssignment => forkJoin(appelsVersAddAssignment))
+    );
+  }
+
+  getAssignment(id: number): Observable<AssignmentComplet | undefined> {
+    const url = `this.uri_api/${id}`;
+    return this.http.get<AssignmentComplet | undefined>(url);
+  }
+
+  getAssignmentsRendu(page: number, limit: number): Observable<any> {
+    return this.http.get<AssignmentComplet[]>(this.uri_api + "/rendu/true" + "?page=" + page + "&limit=" + limit);
+  }
+
+  getAssignmentsNonRendu(page: number, limit: number): Observable<any> {
+    const url = this.uri_api + "/rendu/false" + "?page=" + page + "&limit=" + limit;
+    console.log(url);
+    return this.http.get<AssignmentComplet[]>(url);
+  }
+
 }

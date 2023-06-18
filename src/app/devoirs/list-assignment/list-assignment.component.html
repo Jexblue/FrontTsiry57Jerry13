@@ -1,0 +1,20 @@
+<h2>{{titre}}</h2>
+
+<div class="card-container">
+    <div class="card">
+        <h4>Devoirs non rendus</h4>
+        <!-- liste des assignments non rendus -->
+        <div *ngFor="let a of assignmentsNonRendu">
+            <app-row-assignment [assignment]="a"></app-row-assignment>
+        </div>
+
+    </div>
+
+    <div class="card">
+        <h4>Devoirs rendus</h4>
+        <!-- liste des assignments rendus -->
+        <div *ngFor="let a of assignmentsRendu">
+            <app-row-assignment [assignment]="a"></app-row-assignment>
+        </div>
+    </div>
+</div>

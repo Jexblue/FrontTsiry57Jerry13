@@ -1,8 +1,10 @@
 export class Assignment {
     _id!: string;
-    id!: number;
-    nom!: string;
     dateDeRendu!: Date;
-    rendu!: boolean;
+    dateLimite!: Date;
+    rendu!: Boolean;
+    auteur!: string;
+    matiere!: string;
+    note!: number;
 }
 

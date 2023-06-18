@@ -16,7 +16,7 @@ export class AddAssignmentComponent {
 
 
   constructor(private assignmentsService: AssignmentsService,
-              private router:Router) { }
+    private router: Router) { }
 
   onSubmit(event: any) {
     // On vérifie que les champs ne sont pas vides
@@ -25,8 +25,8 @@ export class AddAssignmentComponent {
 
     let nouvelAssignment = new Assignment();
     // génération d'id, plus tard ce sera fait dans la BD
-    nouvelAssignment.id = Math.abs(Math.random() * 1000000000000000);
-    nouvelAssignment.nom = this.nomDevoir;
+    // nouvelAssignment.id = Math.abs(Math.random() * 1000000000000000);
+    // nouvelAssignment.nom = this.nomDevoir;
     nouvelAssignment.dateDeRendu = this.dateDeRendu;
     nouvelAssignment.rendu = false;
 
