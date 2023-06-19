@@ -27,7 +27,6 @@ import { AddAssignmentComponent } from './assignments/add-assignment/add-assignm
 import { Routes, RouterModule } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
-import { EditAssignmentComponent } from './assignments/edit-assignment/edit-assignment.component';
 import { authGuard } from './shared/auth.guard';
 import { LoginComponent } from './login/login.component';
 
@@ -38,6 +37,9 @@ import { ListAssignmentComponent } from './devoirs/list-assignment/list-assignme
 import { RowAssignmentComponent } from './devoirs/row-assignment/row-assignment.component';
 import { DetailAssignmentComponent } from './devoirs/detail-assignment/detail-assignment.component';
 import { AddAssignemntComponent } from './devoirs/add-assignemnt/add-assignemnt.component';
+import { EditAssignmentComponent } from './devoirs/edit-assignment/edit-assignment.component';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatSelectModule } from '@angular/material/select';
 
 const routes: Routes = [
   {
@@ -53,15 +55,20 @@ const routes: Routes = [
     component: DetailAssignmentComponent
   },
   {
+    path: 'assignments/:id/edit',
+    component: EditAssignmentComponent
+  },
+  {
     path: 'add',
-    component: AddAssignmentComponent
+    component: AddAssignemntComponent
   },
 
-  {
-    path: 'assignments/:id/edit',
-    component: EditAssignmentComponent,
-    canActivate: [authGuard]
-  },
+  // {
+  //   path: 'assignments/:id/edit',
+  //   component: EditAssignmentComponent,
+  //   canActivate: [authGuard]
+  // },
+
   {
     path: 'login',
     component: LoginComponent
@@ -91,7 +98,7 @@ const routes: Routes = [
     MatInputModule, MatFormFieldModule, MatDatepickerModule,
     MatListModule, MatCardModule, MatCheckboxModule, MatSlideToggleModule,
     MatTableModule, MatPaginatorModule, MatToolbarModule, MatSidenavModule,
-    MatProgressSpinnerModule,
+    MatProgressSpinnerModule, MatStepperModule, MatSelectModule,
     FormsModule,
     ReactiveFormsModule
   ],
