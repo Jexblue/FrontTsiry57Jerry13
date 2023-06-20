@@ -65,7 +65,8 @@ export class EditAssignmentComponent {
   setValeurs() {
     this.firstFormGroup.get("matiereCtrl")?.setValue(this.assignment?.matiere[0]._id || "");
     this.secondFormGroup.get("etudiantCtrl")?.setValue(this.assignment?.auteur[0]._id || "");
-
+    this.dateLimite = this.assignment?.dateLimite || new Date();
+    console.log(this.dateLimite);
     // this.thirdFormGroup.get("dateCtrl")?.setValue();
   }
 
@@ -108,19 +109,19 @@ export class EditAssignmentComponent {
   onSubmit() {
     const matiereId = this.firstFormGroup.value.matiereCtrl;
     const etudiantId = this.secondFormGroup.value.etudiantCtrl;
-    const dateDeRendu = this.thirdFormGroup.value.dateCtrl;
     let assignment = new Assignment();
-    assignment.dateLimite = new Date(dateDeRendu as string);
-    assignment.rendu = false;
-    assignment.auteur = etudiantId as string;
     assignment.matiere = matiereId as string;
-    assignment.dateDeRendu = new Date();
-    assignment.note = 0;
+    assignment.auteur = etudiantId as string;
+    assignment.dateLimite = this.dateLimite;
+    assignment.rendu = this.assignment?.rendu as Boolean;
+    assignment.dateDeRendu = this.assignment?.dateDeRendu as Date;
+    assignment.note = this.assignment?.note as number;
+    assignment._id = this.assignment?._id as string;
     console.log(assignment);
-    this.assignmentsService.addAssignment(assignment)
+    this.assignmentsService.updateAssignment(assignment)
       .subscribe(message => {
         console.log(message);
-        this.router.navigate(["/home"]);
+        this.router.navigate(["/assignments/" + assignment._id]);
       });
   }
 
