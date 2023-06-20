@@ -2,44 +2,90 @@
 
 <mat-card class="card">
     <mat-card-content>
+        <div class="card-content">
+            <mat-stepper orientation="vertical" [linear]="true" #stepper>
+                <mat-step [stepControl]="firstFormGroup">
+                    <form [formGroup]="firstFormGroup">
+                        <ng-template matStepLabel>Choisir une matiere</ng-template>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Matière</mat-label>
+                            <mat-select formControlName="matiereCtrl" required>
+                                <mat-option *ngFor="let matiere of matieres" value="{{matiere._id}}">{{
+                                    matiere.nom}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <div>
+                            <button mat-button matStepperNext>Suivant</button>
+                        </div>
+                    </form>
+                </mat-step>
+                <mat-step [stepControl]="secondFormGroup">
+                    <form [formGroup]="secondFormGroup">
+                        <ng-template matStepLabel>Choisir un etudiant</ng-template>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Etudiant</mat-label>
+                            <mat-select formControlName="etudiantCtrl" required>
+                                <mat-option *ngFor="let etudiant of etudiants" value="{{etudiant._id}}">{{
+                                    etudiant.nom}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <div>
+                            <button mat-button matStepperPrevious>Retour</button>
+                            <button mat-button matStepperNext>Suivant</button>
+                        </div>
+                    </form>
+                </mat-step>
 
-        <mat-stepper orientation="vertical" [linear]="true" #stepper>
-            <mat-step [stepControl]="firstFormGroup">
-                <form [formGroup]="firstFormGroup">
-                    <ng-template matStepLabel>Choisir la matiere</ng-template>
-                    <mat-form-field>
-                        <mat-label>Matière</mat-label>
-                        <mat-select formControlName="matiereCtrl" required>
-                            <mat-option *ngFor="let matiere of matieres" value="matiere._id">{{
-                                matiere.nom}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <div>
-                        <button mat-button matStepperNext>Next</button>
-                    </div>
-                </form>
-            </mat-step>
-            <mat-step [stepControl]="secondFormGroup">
-                <form [formGroup]="secondFormGroup">
-                    <ng-template matStepLabel>Fill out your address</ng-template>
-                    <mat-form-field>
-                        <mat-label>Address</mat-label>
-                        <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY" required>
-                    </mat-form-field>
-                    <div>
-                        <button mat-button matStepperPrevious>Back</button>
-                        <button mat-button matStepperNext>Next</button>
-                    </div>
-                </form>
-            </mat-step>
-            <mat-step>
-                <ng-template matStepLabel>Done</ng-template>
-                <p>You are now done.</p>
-                <div>
-                    <button mat-button matStepperPrevious>Back</button>
-                    <button mat-button>Reset</button>
+                <mat-step [stepControl]="thirdFormGroup">
+                    <form [formGroup]="thirdFormGroup">
+                        <ng-template matStepLabel>Date de limite</ng-template>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Date limite</mat-label>
+                            <input matInput [matDatepicker]="picker" [(ngModel)]="dateLimite" name="date" required
+                                formControlName="dateCtrl">
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                        <div>
+                            <button mat-button matStepperPrevious>Retour</button>
+                            <button mat-button matStepperNext>Suivant</button>
+                        </div>
+                    </form>
+                </mat-step>
+
+                <div *ngIf="assignment?.rendu">
+                    <mat-step [stepControl]="fourthFormGroup">
+                        <form [formGroup]="fourthFormGroup">
+                            <ng-template matStepLabel>Date de Rendu</ng-template>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Date limite</mat-label>
+                                <input matInput [matDatepicker]="picker" [(ngModel)]="dateRendu" name="date" required
+                                    formControlName="dateCtrl">
+                                <mat-hint>MM/DD/YYYY</mat-hint>
+                                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                            <div>
+                                <button mat-button matStepperPrevious>Retour</button>
+                                <button mat-button matStepperNext>Suivant</button>
+                            </div>
+                        </form>
+                    </mat-step>
                 </div>
-            </mat-step>
-        </mat-stepper>
+
+
+
+                <mat-step>
+                    <ng-template matStepLabel>Fini</ng-template>
+                    <p>On a fini.</p>
+                    <div>
+                        <button mat-button matStepperPrevious>Retour</button>
+                        <button mat-button (click)="stepper.reset()">Reset</button>
+                        <button mat-button (click)="onSubmit()">Valider</button>
+                    </div>
+                </mat-step>
+            </mat-stepper>
+        </div>
     </mat-card-content>
 </mat-card>

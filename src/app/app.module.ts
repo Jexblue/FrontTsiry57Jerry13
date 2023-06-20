@@ -41,6 +41,7 @@ import { EditAssignmentComponent } from './devoirs/edit-assignment/edit-assignme
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatSelectModule } from '@angular/material/select';
 
+
 const routes: Routes = [
   {
     path: '',
@@ -55,7 +56,7 @@ const routes: Routes = [
     component: DetailAssignmentComponent
   },
   {
-    path: 'assignments/:id/edit',
+    path: 'assignments/:_id/edit',
     component: EditAssignmentComponent
   },
   {
