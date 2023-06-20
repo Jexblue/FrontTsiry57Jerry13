@@ -21,18 +21,8 @@
     border: 1px solid #ccc;
     border-radius: 4px;
   }
-
-  .pagination button:hover {
-    background-color: #f4f4f4;
-  }
   
   .pagination__prev,
   .pagination__next {
     font-weight: bold;
-  }
-
-  .pagination__page.active {
-    background-color: #337ab7;
-    color: #fff;
-    border-color: #337ab7;
   }
