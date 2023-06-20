@@ -7,7 +7,10 @@
         <div *ngFor="let a of assignmentsNonRendu">
             <app-row-assignment [assignment]="a"></app-row-assignment>
         </div>
-
+        <div class="pagination">
+            <button (click)="precedentNR()"  class="pagination__prev">&laquo; Précédent</button>
+            <button (click)="suivantNR()" class="pagination__next">Suivant &raquo;</button>
+        </div>
     </div>
 
     <div class="card">
@@ -15,6 +18,10 @@
         <!-- liste des assignments rendus -->
         <div *ngFor="let a of assignmentsRendu">
             <app-row-assignment [assignment]="a"></app-row-assignment>
+        </div>
+        <div class="pagination">
+            <button (click)="precedentR()"  class="pagination__prev">&laquo; Précédent</button>
+            <button (click)="suivantR()" class="pagination__next">Suivant &raquo;</button>
         </div>
     </div>
 </div>

@@ -6,3 +6,33 @@
     flex: 1;
     margin: 10px;
   }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .pagination a {
+    color: #333;
+    text-decoration: none;
+    padding: 6px 12px;
+    margin: 0 3px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .pagination a:hover {
+    background-color: #f4f4f4;
+  }
+  
+  .pagination__prev,
+  .pagination__next {
+    font-weight: bold;
+  }
+
+  .pagination__page.active {
+    background-color: #337ab7;
+    color: #fff;
+    border-color: #337ab7;
+  }

@@ -13,7 +13,8 @@ export class ListAssignmentComponent implements OnInit {
   assignmentsNonRendu: AssignmentComplet[] = [];
 
   // propriétés pour la pagination non rendu
-  page: number = 1;
+  pageNR: number = 1;
+  pageR: number = 1;
   limit: number = 10;
   totalDocs: number = 0;
   totalPages: number = 0;
@@ -46,10 +47,10 @@ export class ListAssignmentComponent implements OnInit {
   getAssignmentsRendu() {
     console.log("On va chercher les assignments rendu dans le service");
 
-    this.assignmentsService.getAssignmentsRendu(this.page, this.limit)
+    this.assignmentsService.getAssignmentsRendu(this.pageR, this.limit)
       .subscribe(data => {
         this.assignmentsRendu = data.docs;
-        this.page = data.page;
+        this.pageR = data.page;
         this.limit = data.limit;
         this.totalDocs = data.totalDocs;
         this.totalPages = data.totalPages;
@@ -66,10 +67,10 @@ export class ListAssignmentComponent implements OnInit {
   getAssignmentsNonRendu() {
     console.log("On va chercher les assignments non rendu dans le service");
 
-    this.assignmentsService.getAssignmentsNonRendu(this.pageN, this.limitN)
+    this.assignmentsService.getAssignmentsNonRendu(this.pageNR, this.limitN)
       .subscribe(data => {
         this.assignmentsNonRendu = data.docs;
-        this.page = data.page;
+        this.pageNR = data.page;
         this.limit = data.limit;
         this.totalDocs = data.totalDocs;
         this.totalPages = data.totalPages;
@@ -80,5 +81,27 @@ export class ListAssignmentComponent implements OnInit {
         console.log("Données reçues");
         console.log(this.assignmentsNonRendu);
       });
+  }
+
+    async precedentNR(){
+        this.pageNR-=1;
+        await this.getAssignmentsNonRendu();
+      
+    }
+
+    async suivantNR(){
+      this.pageNR+=1;
+      await this.getAssignmentsNonRendu();
+    }
+
+    async precedentR(){
+      this.pageR-=1;
+      await this.getAssignmentsRendu();
+    
+    }
+
+  async suivantR(){
+    this.pageR+=1;
+    await this.getAssignmentsRendu();
   }
 }
