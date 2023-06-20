@@ -49,6 +49,10 @@ const routes: Routes = [
     component: ListAssignmentComponent
   },
   {
+    path: 'test',
+    component: AssignmentsComponent
+  },
+  {
     path: 'home',
     component: ListAssignmentComponent
   },

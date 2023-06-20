@@ -13,17 +13,6 @@ export class ListAssignmentComponent implements OnInit {
   assignmentsNonRendu: AssignmentComplet[] = [];
 
   // propriétés pour la pagination non rendu
-  pageNR: number = 1;
-  pageR: number = 1;
-  limit: number = 10;
-  totalDocs: number = 0;
-  totalPages: number = 0;
-  hasPrevPage: boolean = false;
-  prevPage: number = 0;
-  hasNextPage: boolean = false;
-  nextPage: number = 0;
-
-  //proprietes pour la pagination rendu
   pageN: number = 1;
   limitN: number = 10;
   totalDocsN: number = 0;
@@ -32,6 +21,16 @@ export class ListAssignmentComponent implements OnInit {
   prevPageN: number = 0;
   hasNextPageN: boolean = false;
   nextPageN: number = 0;
+
+  //proprietes pour la pagination rendu
+  pageR: number = 1;
+  limitR: number = 10;
+  totalDocsR: number = 0;
+  totalPagesR: number = 0;
+  hasPrevPageR: boolean = false;
+  prevPageR: number = 0;
+  hasNextPageR: boolean = false;
+  nextPageR: number = 0;
 
 
   constructor(private assignmentsService: AssignmentsService) {
@@ -47,17 +46,17 @@ export class ListAssignmentComponent implements OnInit {
   getAssignmentsRendu() {
     console.log("On va chercher les assignments rendu dans le service");
 
-    this.assignmentsService.getAssignmentsRendu(this.pageR, this.limit)
+    this.assignmentsService.getAssignmentsRendu(this.pageR, this.limitR)
       .subscribe(data => {
         this.assignmentsRendu = data.docs;
         this.pageR = data.page;
-        this.limit = data.limit;
-        this.totalDocs = data.totalDocs;
-        this.totalPages = data.totalPages;
-        this.hasPrevPage = data.hasPrevPage;
-        this.prevPage = data.prevPage;
-        this.hasNextPage = data.hasNextPage;
-        this.nextPage = data.nextPage;
+        this.limitR = data.limit;
+        this.totalDocsR = data.totalDocs;
+        this.totalPagesR = data.totalPages;
+        this.hasPrevPageR = data.hasPrevPage;
+        this.prevPageR = data.prevPage;
+        this.hasNextPageR = data.hasNextPage;
+        this.nextPageR = data.nextPage;
 
         console.log("Données reçues");
         console.log(this.assignmentsRendu);
@@ -67,41 +66,69 @@ export class ListAssignmentComponent implements OnInit {
   getAssignmentsNonRendu() {
     console.log("On va chercher les assignments non rendu dans le service");
 
-    this.assignmentsService.getAssignmentsNonRendu(this.pageNR, this.limitN)
+    this.assignmentsService.getAssignmentsNonRendu(this.pageN, this.limitN)
       .subscribe(data => {
         this.assignmentsNonRendu = data.docs;
-        this.pageNR = data.page;
-        this.limit = data.limit;
-        this.totalDocs = data.totalDocs;
-        this.totalPages = data.totalPages;
-        this.hasPrevPage = data.hasPrevPage;
-        this.prevPage = data.prevPage;
-        this.hasNextPage = data.hasNextPage;
-        this.nextPage = data.nextPage;
+        this.pageN = data.page;
+        this.limitN = data.limit;
+        this.totalDocsN = data.totalDocs;
+        this.totalPagesN = data.totalPages;
+        this.hasPrevPageN = data.hasPrevPage;
+        this.prevPageN = data.prevPage;
+        this.hasNextPageN = data.hasNextPage;
+        this.nextPageN = data.nextPage;
         console.log("Données reçues");
         console.log(this.assignmentsNonRendu);
       });
   }
 
-    async precedentNR(){
-        this.pageNR-=1;
-        await this.getAssignmentsNonRendu();
-      
-    }
+  async debutNR() {
+    this.pageN = 0;
+    this.getAssignmentsNonRendu();
+  }
 
-    async suivantNR(){
-      this.pageNR+=1;
+  async precedentNR() {
+    if (this.pageN > 0) {
+      this.pageN -= 1;
       await this.getAssignmentsNonRendu();
     }
+  }
 
-    async precedentR(){
-      this.pageR-=1;
-      await this.getAssignmentsRendu();
-    
+  async suivantNR() {
+    if (this.pageN < this.totalPagesN) {
+      this.pageN += 1;
+      await this.getAssignmentsNonRendu();
     }
+  }
 
-  async suivantR(){
-    this.pageR+=1;
-    await this.getAssignmentsRendu();
+  async finNR() {
+    this.pageN = this.totalPagesN;
+    this.getAssignmentsNonRendu();
+  }
+
+
+
+  async debutR() {
+    this.pageR = 0;
+    this.getAssignmentsRendu();
+  }
+
+  async precedentR() {
+    if (this.pageR > 0) {
+      this.pageR -= 1;
+      await this.getAssignmentsRendu();
+    }
+  }
+
+  async suivantR() {
+    if (this.pageR < this.totalPagesR) {
+      this.pageR += 1;
+      await this.getAssignmentsRendu();
+    }
+  }
+
+  async finR() {
+    this.pageR = this.totalPagesR;
+    this.getAssignmentsRendu();
   }
 }
