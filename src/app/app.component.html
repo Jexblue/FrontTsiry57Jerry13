@@ -1,68 +1,50 @@
-<div *ngIf="currentRoute !== '/login'">
-    <mat-toolbar color="primary">
-        <button mat-icon-button (click)="toggleSidebar()">
-            <mat-icon>menu</mat-icon>
-        </button>
-        <a routerLink="/home" class="title-link">{{ title }}</a>
-        <span class="spacer"></span>
-        <button mat-raised-button color="primary" (click)="creerDonneesDeTest()" class="reset-button">
-            Reset la base de données
-        </button>
-        <div *ngIf="currentRoute !== '/login'" class="login-section">
-            <nav>
-                <a routerLink="/login">
-                    <button mat-raised-button color="primary" (click)="login()" class="login-button">{{ labelConnexion
-                        }}</button>
-                </a>
-            </nav>
-        </div>
-    </mat-toolbar>
+<mat-toolbar color="primary">
+    <button mat-icon-button (click)="toggleSidebar()">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <a routerLink="/home" class="title-link">{{ title }}</a>
+    <span class="spacer"></span>
+    <button mat-raised-button color="primary" (click)="creerDonneesDeTest()" class="reset-button">
+        Reset la base de données
+    </button>
+    <div *ngIf="currentRoute !== '/login'" class="login-section">
+        <nav>
+            <a routerLink="/login" *ngIf="!isLogged()">
+                <button mat-raised-button color="primary" class="login-button">Se connecter</button>
+            </a>
+            <a routerLink="/login" *ngIf="isLogged()">
+                <button mat-raised-button color="primary" class="login-button" (click)="logout()">Se
+                    deconnecter</button>
+            </a>
+        </nav>
+    </div>
+</mat-toolbar>
 
-    <mat-sidenav-container class="container">
-        <mat-sidenav mode="side" [opened]="sidebarOpened" class="sidebar">
-            <mat-toolbar *ngIf="isLogged()" class="user-toolbar">
-                <span>
-                    Bonjour {{ nom }}
-                </span>
-            </mat-toolbar>
-            <mat-nav-list>
-                <a mat-list-item routerLink="/add" class="sidebar-item">Creation de devoir</a>
-            </mat-nav-list>
-        </mat-sidenav>
+<mat-sidenav-container class="container">
+    <mat-sidenav mode="side" [opened]="sidebarOpened" class="sidebar" *ngIf="currentRoute !== '/login'">
+        <mat-toolbar *ngIf="isLogged()" class="user-toolbar">
+            <span>
+                Bonjour {{ nom }}
+            </span>
+        </mat-toolbar>
+        <mat-nav-list>
+            <a mat-list-item routerLink="/add" class="sidebar-item">Creation de devoir</a>
+        </mat-nav-list>
+    </mat-sidenav>
 
-        <mat-sidenav-content>
-            <div class="content">
-                <div *ngIf="loading" class="spinner-container">
-                    <mat-progress-spinner class="spinner" mode="indeterminate"></mat-progress-spinner>
-                </div>
-                <div *ngIf="!loading">
-                    <router-outlet></router-outlet>
-                </div>
+    <mat-sidenav-content>
+        <div class="content">
+            <div *ngIf="loading" class="spinner-container">
+                <mat-progress-spinner class="spinner" mode="indeterminate"></mat-progress-spinner>
             </div>
-        </mat-sidenav-content>
-    </mat-sidenav-container>
-</div>
-<div *ngIf="currentRoute == '/login'">
-    <mat-toolbar color="primary">
-        <button mat-icon-button (click)="toggleSidebar()">
-            <mat-icon>menu</mat-icon>
-        </button>
-        <a routerLink="/home" class="title-link">{{ title }}</a>
-        <span class="spacer"></span>
-        <button mat-raised-button color="primary" (click)="creerDonneesDeTest()" class="reset-button">
-            Reset la base de données
-        </button>
-        <div *ngIf="currentRoute !== '/login'" class="login-section">
-            <nav>
-                <a routerLink="/login">
-                    <button mat-raised-button color="primary" (click)="login()" class="login-button">{{ labelConnexion
-                        }}</button>
-                </a>
-            </nav>
+            <div *ngIf="!loading">
+                <router-outlet></router-outlet>
+            </div>
         </div>
-    </mat-toolbar>
-    <router-outlet></router-outlet>
-</div>
+    </mat-sidenav-content>
+</mat-sidenav-container>
+
+
 
 
 

@@ -4,6 +4,7 @@ import { AssignmentComplet } from 'src/app/models/assignmentComplet.model';
 import { Etudiant } from 'src/app/models/etudiant.model';
 import { Matiere } from 'src/app/models/matiere.model';
 import { AssignmentsService } from 'src/app/shared/assignments.service';
+import { AuthService } from 'src/app/shared/auth.service';
 
 @Component({
   selector: 'app-detail-assignment',
@@ -15,7 +16,8 @@ export class DetailAssignmentComponent implements OnInit {
   titre: string = 'Details de devoir';
   constructor(private route: ActivatedRoute,
     private assignmentsService: AssignmentsService,
-    private router: Router) { }
+    private router: Router,
+    private authService: AuthService) { }
 
   ngOnInit(): void {
     const id = this.route.snapshot.params['_id'];
@@ -39,17 +41,24 @@ export class DetailAssignmentComponent implements OnInit {
       });
   }
 
-  supprimer() {
-    this.assignmentsService.deleteAssignment(this.assignment as AssignmentComplet)
-      .subscribe(message => {
-        console.log(message);
-        // Pour cacher le detail, on met l'assignment à null
-        this.assignment = undefined;
+  isAdmin() {
+    return this.authService.isAdmin();
+  }
 
-        // et on navigue vers la page d'accueil
-        this.router.navigate(["/home"]);
-        window.location.reload();
-      });
+  async supprimer() {
+    if (await this.isAdmin()) {
+      this.assignmentsService.deleteAssignment(this.assignment as AssignmentComplet)
+        .subscribe(message => {
+          console.log(message);
+          // Pour cacher le detail, on met l'assignment à null
+          this.assignment = undefined;
+
+          // et on navigue vers la page d'accueil
+          this.router.navigate(["/home"]);
+          window.location.reload();
+        });
+    }
+
   }
 
 }

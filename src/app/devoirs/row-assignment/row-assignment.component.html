@@ -29,7 +29,7 @@
             </div>
             <button mat-button color="primary" routerLink="/assignments/{{assignment?._id}}/edit">Modifier</button>
             <button mat-button color="accent" routerLink="/assignments/{{assignment?._id}}">Détails</button>
-            <button mat-button color="warn" (click)="supprimer()">Supprimer</button>
+            <button mat-button color="warn" (click)="supprimer()" *ngIf="isAdmin()">Supprimer</button>
         </div>
     </mat-card-footer>
 </mat-card>

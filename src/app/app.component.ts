@@ -41,22 +41,22 @@ export class AppComponent {
     this.sidebarOpened = !this.sidebarOpened;
   }
 
-  login() {
-    // utilise l'authService pour se connecter
-    if (!this.authService.loggedIn) {
-      this.authService.logIn();
-      // on change le label du bouton
-      this.labelConnexion = "Se déconnecter";
-    } else {
-      this.authService.logOut();
-      // et on navigue vers la page d'accueil
-      this.router.navigate(["/home"]);
-    }
-  }
+  // login() {
+  //   // utilise l'authService pour se connecter
+  //   if (!this.authService.loggedIn) {
+  //     this.authService.logIn();
+  //     // on change le label du bouton
+  //     this.labelConnexion = "Se déconnecter";
+  //   } else {
+  //     this.authService.logOut();
+  //     // et on navigue vers la page d'accueil
+  //     this.router.navigate(["/home"]);
+  //   }
+  // }
 
   isLogged() {
     if (this.authService.loggedIn) {
-      this.nom = "Michel Buffa";
+      this.nom = this.authService.user.name;
     }
     return this.authService.loggedIn;
   }
@@ -93,5 +93,9 @@ export class AppComponent {
     //   // plusieurs manières de faire....
     //   window.location.reload();
     // });
+  }
+
+  logout() {
+    this.authService.logOut();
   }
 }
