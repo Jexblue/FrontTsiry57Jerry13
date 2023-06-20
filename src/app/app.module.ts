@@ -40,6 +40,7 @@ import { AddAssignemntComponent } from './devoirs/add-assignemnt/add-assignemnt.
 import { EditAssignmentComponent } from './devoirs/edit-assignment/edit-assignment.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatSelectModule } from '@angular/material/select';
+import { RendreAssignmentComponent } from './devoirs/rendre-assignment/rendre-assignment.component';
 
 
 const routes: Routes = [
@@ -58,6 +59,10 @@ const routes: Routes = [
   {
     path: 'assignments/:_id/edit',
     component: EditAssignmentComponent
+  },
+  {
+    path: 'assignments/:_id/rendre',
+    component: RendreAssignmentComponent
   },
   {
     path: 'add',
@@ -88,6 +93,7 @@ const routes: Routes = [
     RowAssignmentComponent,
     DetailAssignmentComponent,
     AddAssignemntComponent,
+    RendreAssignmentComponent,
   ],
   imports: [
     BrowserModule,

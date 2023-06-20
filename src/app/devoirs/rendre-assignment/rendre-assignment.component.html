@@ -1,0 +1,63 @@
+<h2>{{title}}</h2>
+
+<mat-card class="card">
+    <mat-card-content>
+        <div class="card-content">
+            <div class="title-container">
+                <div class="box gauche"><img class="matiere-image"
+                        [src]="'assets/matiere/'+assignment?.matiere?.[0]?.pathPhoto"></div>
+                <div class="box centre">
+                    <h3 class="matiere-nom">{{assignment?.matiere?.[0]?.nom}}</h3>
+                </div>
+                <div class="box droite"><img class="prof-image"
+                        [src]="'assets/prof/'+assignment?.matiere?.[0]?.pathProf">
+                </div>
+            </div>
+            <div class="image-etudiant">
+                <img class="etu-image" src="assets/etudiant/{{assignment?.auteur?.[0]?.pathPhoto}}">
+            </div>
+            <mat-stepper orientation="vertical" [linear]="true" #stepper>
+                <mat-step [stepControl]="thirdFormGroup">
+                    <form [formGroup]="thirdFormGroup">
+                        <ng-template matStepLabel>Date de rendu</ng-template>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Date de rendu</mat-label>
+                            <input matInput [matDatepicker]="picker" [(ngModel)]="dateRendu" name="date" required
+                                formControlName="dateCtrl">
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                        <div>
+                            <button mat-button matStepperPrevious>Retour</button>
+                            <button mat-button matStepperNext>Suivant</button>
+                        </div>
+                    </form>
+                </mat-step>
+
+                <mat-step [stepControl]="firstFormGroup">
+                    <form [formGroup]="firstFormGroup">
+                        <ng-template matStepLabel>Note</ng-template>
+                        <mat-form-field>
+                            <mat-label>Note</mat-label>
+                            <input matInput placeholder="Note" formControlName="firstCtrl" required type="number">
+                        </mat-form-field>
+                        <div>
+                            <button mat-button matStepperNext>Next</button>
+                        </div>
+                    </form>
+                </mat-step>
+
+                <mat-step>
+                    <ng-template matStepLabel>Fini</ng-template>
+                    <p>On a fini.</p>
+                    <div>
+                        <button mat-button matStepperPrevious>Retour</button>
+                        <button mat-button (click)="stepper.reset()">Reset</button>
+                        <button mat-button (click)="onSubmit()">Valider</button>
+                    </div>
+                </mat-step>
+            </mat-stepper>
+        </div>
+    </mat-card-content>
+</mat-card>
